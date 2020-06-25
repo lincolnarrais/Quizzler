@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart' as rFAlert;
 
 import 'quiz_brain.dart';
 
@@ -33,13 +34,33 @@ class _QuizPageState extends State<QuizPage> {
 
   int index = 0;
 
+  void resetQuiz() {
+    setState(() {
+      quizBrain.reset();
+      scoreKeeper = [];
+    });
+  }
+
   void checkAnswer(userPickedAnswer) {
     bool correctAnswer = quizBrain.answer;
 
     setState(() {
-      scoreKeeper.add(userPickedAnswer == correctAnswer
-          ? Icon(Icons.check, color: Colors.green)
-          : Icon(Icons.close, color: Colors.red));
+      if (quizBrain.isFinished()) {
+        rFAlert.Alert(
+          context: context,
+          title: 'Alert',
+        ).show().then((_) => resetQuiz());
+      } else if (userPickedAnswer == correctAnswer) {
+        scoreKeeper.add(Icon(
+          Icons.check,
+          color: Colors.green,
+        ));
+      } else {
+        scoreKeeper.add(Icon(
+          Icons.close,
+          color: Colors.red,
+        ));
+      }
 
       quizBrain.nextQuestion();
     });

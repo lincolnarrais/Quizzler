@@ -71,4 +71,12 @@ class QuizBrain {
   bool get answer {
     return _questionBank[_questionNumber].answer;
   }
+
+  bool isFinished() {
+    return _questionNumber == _questionBank.length - 1;
+  }
+
+  void reset() {
+    _questionNumber = 0;
+  }
 }
